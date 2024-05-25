@@ -5,9 +5,10 @@ SRC_DIR := src
 OBJ_DIR := obj
 BIN_DIR := bin
 
+
 SOURCES := $(wildcard src/*.c)
 OBJECTS := $(patsubst src/%.c, obj/%.o, $(SOURCES))
-EXECUTABLE := $(BIN_DIR)/main
+EXECUTABLE := main
 
 all: $(EXECUTABLE)
 
@@ -17,9 +18,13 @@ run: $(EXECUTABLE)
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) -o $@ $^
 
-obj/%.o: src/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) -c $(CFLAGS) -o $@ $<
+
+$(OBJ_DIR):
+	mkdir $(OBJ_DIR)
 
 clean:
 	del /q $(OBJ_DIR)\*
-	del /q $(BIN_DIR)\*
+	rmdir /q $(OBJ_DIR)
+
